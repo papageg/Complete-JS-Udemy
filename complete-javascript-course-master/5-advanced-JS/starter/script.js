@@ -342,26 +342,44 @@ c) correct answer (I would use a number for this)
 
 // interviewQuestion(ranNum);
 
-var ranNumber = Math.ceil(Math.random() * 3);
 
-var Question = function(qstion, answer){
+
+function Question(qstion, answers,correct){
     this.qstion = qstion;
-    this.answer = answer;
+    this.answers = answers;
+    this.correct = correct;
 }
 
-Question.prototype.Question = function() {
-    ranNumber;
+Question.prototype.displayQuestion =
+function (){
+    console.log(this.qstion)
+    
+
+    for(var i = 0; i < this.answers.length; i++){
+        console.log(i + ':' + this.answers[i]);
+    }
+
+    
+
+    if (prompt(this.qstion) === this.correct){
+        console.log('This is correct')
+    } else {
+        console.log('This is incorrect')
+    }
+    
 }
 
-var resturant = new Question('Who worked in a resturant?', 'greg'); // Instantiation
-var carlsJr = new Question('Who worked at Carl\'s Jr.', 'marco');
-var winCleaner = new Question('Who is a window cleaner?', 'gilbert');
+var resturant = new Question('Who worked in a resturant?', ['greg','marco','gilbert'], 0); // Instantiation
+var carlsJr = new Question('Who worked at Carl\'s Jr.?', ['greg','marco','gilbert'], 1);
+var winCleaner = new Question('Who is a window cleaner?', ['greg','marco','gilbert'], 2);
 
 
 var allQuestions = [resturant, carlsJr, winCleaner];
 
+var ranNumber = Math.floor(Math.random() * allQuestions.length);
 
-console.log(allQuestions[ranNumber - 1]);
+allQuestions[ranNumber].displayQuestion();
+
 
 
 
