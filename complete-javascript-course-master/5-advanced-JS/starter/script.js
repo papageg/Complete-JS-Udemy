@@ -342,66 +342,40 @@ c) correct answer (I would use a number for this)
 
 // interviewQuestion(ranNum);
 
-
-
-function Question(qstion, answers,correct){
-    this.qstion = qstion;
-    this.answers = answers;
-    this.correct = correct;
-}
-
-Question.prototype.displayQuestion =
-function (){
-    console.log(this.qstion)
+// (function(){
+//     function Question(qstion, answers,correct){
+//         this.qstion = qstion;
+//         this.answers = answers;
+//         this.correct = correct;
+//     }
     
-
-    for(var i = 0; i < this.answers.length; i++){
-        console.log(i + ':' + this.answers[i]);
-    }
-
+//     Question.prototype.displayQuestion =
+//     function (){
+//         console.log(this.qstion)
+        
     
-
-    if (prompt(this.qstion) === this.correct){
-        console.log('This is correct')
-    } else {
-        console.log('This is incorrect')
-    }
+//         for(var i = 0; i < this.answers.length; i++){
+//             console.log(i + ':' + this.answers[i]);
+//         }
     
-}
-
-var resturant = new Question('Who worked in a resturant?', ['greg','marco','gilbert'], 0); // Instantiation
-var carlsJr = new Question('Who worked at Carl\'s Jr.?', ['greg','marco','gilbert'], 1);
-var winCleaner = new Question('Who is a window cleaner?', ['greg','marco','gilbert'], 2);
-
-
-var allQuestions = [resturant, carlsJr, winCleaner];
-
-var ranNumber = Math.floor(Math.random() * allQuestions.length);
-
-allQuestions[ranNumber].displayQuestion();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//         if (parseInt(prompt('Please select the correct answer.')) === this.correct){
+//             console.log('This is correct')
+//         } else {
+//             console.log('This is incorrect')
+//         }
+//     }
+    
+//     var resturant = new Question('Who worked in a resturant?', ['greg','marco','gilbert'], 0); // Instantiation
+//     var carlsJr = new Question('Who worked at Carl\'s Jr.?', ['greg','marco','gilbert'], 1);
+//     var winCleaner = new Question('Who is a window cleaner?', ['greg','marco','gilbert'], 2);
+    
+    
+//     var allQuestions = [resturant, carlsJr, winCleaner];
+    
+//     var ranNumber = Math.floor(Math.random() * allQuestions.length);
+    
+//     allQuestions[ranNumber].displayQuestion();
+// })();
 
 
 /*
@@ -415,3 +389,68 @@ allQuestions[ranNumber].displayQuestion();
 
 11. Display the score in the console. Use yet another method for this.
 */
+
+(function(){
+    function Question(qstion, answers,correct){
+        this.qstion = qstion;
+        this.answers = answers;
+        this.correct = correct;
+    }
+    
+    Question.prototype.displayQuestion =
+    function (ans){
+        console.log(this.qstion)
+        
+        for(var i = 0; i < this.answers.length; i++){
+            console.log(i + ':' + this.answers[i]);
+        }
+    }
+
+    Question.prototype.checkAnswer = function (ans, callback){
+        var sc;
+        if (ans === this.correct){
+            console.log('This is correct')
+            sc = callback(true);
+        } else {
+            console.log('This is incorrect')
+            sc = callback(false);
+        }
+
+        this.displayScore(sc);
+    }
+
+    Question.prototype.displayScore = function(score){
+        console.log('Your current score is: ' + score);
+        console.log('------------------------')
+    }
+    
+    var resturant = new Question('Who worked in a resturant?', ['greg','marco','gilbert'], 0); // Instantiation
+    var carlsJr = new Question('Who worked at Carl\'s Jr.?', ['greg','marco','gilbert'], 1);
+    var winCleaner = new Question('Who is a window cleaner?', ['greg','marco','gilbert'], 2);
+
+    var allQuestions = [resturant, carlsJr, winCleaner];
+
+    function score(){
+        var sc = 0;
+        return function(correct){
+            if(correct){
+                sc++;
+            }
+            return sc;
+        }
+    }
+    var keepScore = score();
+    
+    function nextQuestion(){
+        var ranNumber = Math.floor(Math.random() * allQuestions.length);
+        allQuestions[ranNumber].displayQuestion();
+
+        var answer = prompt('Please select the correct answer.');
+        
+        if(answer !== 'exit'){
+            allQuestions[ranNumber].checkAnswer(parseInt(answer), keepScore);
+            nextQuestion();
+        }
+    }
+    nextQuestion();
+})();
